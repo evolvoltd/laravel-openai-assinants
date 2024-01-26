@@ -1,0 +1,30 @@
+{
+    "name": "evolvoltd/laravel-openai-assistants",
+    "description": "Method to send messages to an OpenAI Assistant of your choice.",
+    "type": "library",
+    "require": {
+        "laravel/framework": "^10.0",
+        "php": ">=8.2.0",
+        "openai-php/laravel": "^0.8.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Evolco",
+            "email": "info@evolco.eu"
+        }
+    ],
+	"autoload": {
+        "psr-4": {
+            "Evolvoltd\\LaravelOpenaiAssistants\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Evolvoltd\\LaravelOpenaiAssistants\\LaravelOpenAIAssistantsServiceProvider"
+            ]
+        }
+},
+    "minimum-stability": "stable"
+}
