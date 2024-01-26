@@ -21,7 +21,7 @@ class LaravelOpenAIAssistantsServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/config/assistants.php' => \App\Providers\config_path('assistants.php'),
+            __DIR__ . '/config/assistants.php' => config_path('assistants.php'),
         ]);
     }
 }
