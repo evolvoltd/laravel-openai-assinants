@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use OpenAI\Laravel\Facades\OpenAI;
-use Illuminate\Http\UploadedFile;
 
 class GPTService
 {
@@ -148,7 +147,7 @@ class GPTService
         return $run;
     }
 
-    public function completeRun($run, string $message, ParseGPTResponse $parseGPTResponse)
+    public function completeRun($run, string $originalMessage, ParseGPTResponse $parseGPTResponse)
     {
         if ($run->status == 'completed') {
             // get the latest messages after user's message
@@ -165,7 +164,7 @@ class GPTService
                 // check if assistant sent more than 1 message
                 if ($messagesCount > 1) {
                     foreach ($messagesData as $message) {
-                        if ($message->content[0]->text->value != $message)
+                        if ($message->content[0]->text->value != $originalMessage)
                             // concatenate multiple messages
                             $assistantResponseMessage .= $message->content[0]->text->value . "\n\n";
                     }
@@ -181,7 +180,7 @@ class GPTService
                     status: 'completed',
                     run_id: $run->id,
                     thread_id: $run->threadId,
-                    message: $message,
+                    message: $originalMessage,
                     response: $parsedResponseMessage,
                 );
             } else {
@@ -189,7 +188,7 @@ class GPTService
                     status: 'error',
                     run_id: $run->id,
                     thread_id: $run->threadId,
-                    message: $message,
+                    message: $originalMessage,
                     response: 'Something went wrong; assistant didn\'t respond',
                 );
             }
@@ -198,7 +197,7 @@ class GPTService
                 status: 'error',
                 run_id: $run->id,
                 thread_id: $run->threadId,
-                message: $message,
+                message: $originalMessage,
                 response: 'Something went wrong; assistant run wasn\'t completed successfully',
             );
         }
