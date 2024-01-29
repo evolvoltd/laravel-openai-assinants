@@ -11,14 +11,14 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class GPTService
 {
-    public function ask(string $message, ParseGPTResponse $parseGPTResponse, $fileContents = null)
+    public function ask(string $message, ParseGPTResponse $parseGPTResponse, $fileContents = null, $gptAssistantId = null, $queueName = null)
     {
-        $assistantId = config('assistants.gpt_assistant_id');
+        $assistantId = $gptAssistantId ?? config('assistants.gpt_assistant_id');
 
         // create new thread and run it
         [$file, $threadId, $run] = $this->createThreadAndRun($assistantId, $message, $parseGPTResponse, $fileContents);
 
-        ProcessGPTQuery::dispatch($run, $threadId, $message, $file, $parseGPTResponse)->onQueue(config('assistants.queue_name'));
+        ProcessGPTQuery::dispatch($run, $threadId, $message, $file, $parseGPTResponse)->onQueue($queueName ?? config('assistants.queue_name'));
 
         return $threadId;
     }
